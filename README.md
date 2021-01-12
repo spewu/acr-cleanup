@@ -39,3 +39,9 @@ In this case, script will delete the docker images older than 30 days for every 
 .\acr-cleanup.ps1 -ServicePrincipalId db27d2f6-b339-4918-856f-ca0e5c8d0ab5 -ServicePrincipalPass 67cc2733-69c9-46ee-b4d2-d679ceaf77ed -ServicePrincipalTenant fc334bf1-d9f9-4880-85a3-404c7c479c91 -AzureRegistryName my-azure-registry -NoOfKeptImages 5
 
 In this case, script will keep the 5 most recent docker images for every repo in the provided container registry.  Each repo will have no more than 5 images after executing.
+
+## Docker
+A Dockerfile has been added, to wrap the script inside a container. It uses the official powershell base image and installs the Azure CLI as well. It then exposes the script, and allows it to be run as normal, but where you provide the variables via environment variables. It only supports the version that keeps the latest X number of images (default 5).
+
+## Docker example using public image (you can also build it yourself)
+docker run -e SERVICE_PRINCIPAL_ID=db27d2f6-b339-4918-856f-ca0e5c8d0ab5 -e SERVICE_PRINCIPAL_PASS=67cc2733-69c9-46ee-b4d2-d679ceaf77ed -e SERVICE_PRINCIPAL_TENANT=fc334bf1-d9f9-4880-85a3-404c7c479c91 -e AZURE_REGISTRY_NAME=my-azure-registry -e NO_OF_KEPT_IMAGES=5 sohape/acr-cleaner
